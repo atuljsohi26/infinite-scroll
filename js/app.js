@@ -4,7 +4,6 @@
 
     // get the quotes from API
     const getQuotes = async (page, limit) => {
-        console.log('page =', page);
         let API_URL = `https://www.pinkvilla.com/photo-gallery-feed-page`;
         if(page > 0) {
              API_URL = `https://www.pinkvilla.com/photo-gallery-feed-page/page/${page}`;
@@ -21,7 +20,6 @@
     // show the quotes
     const showQuotes = (quotes) => {
         quotes.forEach(quote => {
-            //console.log('quote =', quote);
             const quoteEl = document.createElement('blockquote');
             quoteEl.classList.add('quote');
 
@@ -54,12 +52,13 @@
 
     const hasMoreQuotes = (page, limit, total) => {
         const startIndex = (page - 1) * limit + 1;
-        return total === 0 || startIndex < total;
+        
+        // return total === 0 || startIndex < total;
+        return total >= 0 ;
     };
 
     // load quotes
     const loadQuotes = async (page, limit) => {
-
         // show the loader
         showLoader();
 
@@ -89,13 +88,14 @@
     const limit = 20;
     let total = 0;
 
-
+    
     window.addEventListener('scroll', () => {
         const {
             scrollTop,
             scrollHeight,
             clientHeight
         } = document.documentElement;
+
         if (scrollTop + clientHeight >= scrollHeight - 5 &&
             hasMoreQuotes(currentPage, limit, total)) {
             currentPage++;
@@ -104,6 +104,8 @@
     }, {
         passive: true
     });
+
+    
 
     // initialize
     loadQuotes(currentPage, limit);
